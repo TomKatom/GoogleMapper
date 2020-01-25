@@ -27,13 +27,16 @@ router.get('/', [
         return res.status(422).json({ errors: errors.array() });
     }
     else{
-        conn.query(`select * from tblEmails where token = "${req.query.token}" and emailMode = '{"mode" : "verify"}'`,(err, rows, fields) => {
+        conn.query(`select * from tblEmails where token = "${req.query.token}"`,(err, rows, fields) => {
           if (err)  return res.status(500).json({msg: "Error Verifying Email."});
           else if(rows.length === 1){
               console.log(rows[0].userId);
-              conn.query(`update tblUsers set verifiedEmail = 1 where userId = ${rows[0].userId}`,(err, rows, fields) => {
+              conn.query(`update tblUsers set verifiedEmail = 1 where userId = ${rows[0].userId}`,(err, userRows, fields) => {
                   if(err) return res.status(500).json({msg: "Error Verifying Email."});
-                  else{
+                  else {
+                      conn.query(`delete from tblEmails where emailId = ${rows[0].emailId}`, (err, rows, fields) => {
+                          if (err) return res.status(500).json({msg: "Error Verifying Email."});
+                      });
                       return res.json({msg: "Email Verified."});
                   }
               });
