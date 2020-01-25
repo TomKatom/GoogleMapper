@@ -2,13 +2,21 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 
-router.post('/', (req, res) => {
+var authorized = (req, res, next) => {
     if(req.session.loggedIn){
-        res.sendStatus(200);
+        next();
     }
     else{
         res.status(401).send('Unauthorized, wrong session.');
     }
+};
+
+router.post('/',authorized, (req, res) => {
+   res.sendStatus(200);
 });
 
-module.exports = router;
+module.exports = {
+    router: router,
+    authorized: authorized
+};
+
