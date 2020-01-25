@@ -4,6 +4,8 @@ var bodyParser = require('body-parser');
 const { check, validationResult, body } = require('express-validator');
 var bcrypt = require('bcryptjs');
 const {checkExistsEmail , checkExistsUsername, checkExistsPhoneNumber} = require('./checkExistInDB.js');
+const nanoid = require('nanoid');
+
 
 router.post('/', [
     /* Input Validation */
@@ -37,13 +39,38 @@ router.post('/', [
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(req.body.password, salt);
         var sqlQuery = `insert into tblUsers (username, password, phoneNumber, email) values ("${req.body.username}", "${hash}", "${req.body.phoneNumber}", "${req.body.email}")`;
-        console.log(sqlQuery);
         conn.query(sqlQuery, (err, rows, fields) => {
             if(err) {
-                res.status(500).json({result: 'Error Creating Account'});
+                return res.status(500).json({result: 'Error Creating Account'});
             }
             else{
-                res.json({result: 'Account Created Successfully.'});
+                conn.query(`select * from tblUsers where username = "${req.body.username}"`, (err, rows, fields) => {
+                    if (rows.length === 1) {
+                        var token = nanoid(48);
+                        conn.query(`insert into tblEmails (userId, emailMode, token) values (${rows[0].userId}, '{ "mode" : "verify" }', "${token}")`, (err, rows, fields) => {
+                            if (err) return res.status(500).json({result: 'Error inserting Email to db.'});
+                            else{
+                                let mailOptions = {
+                                    to: req.body.email,
+                                    subject: "Google Mapper - Verification Email",
+                                    html: `<a href="localhost:3000/verify?token=${token}"> Verify Email </a>`
+                                };
+                                transporter.sendMail(mailOptions, (error, info) => {
+                                    if (error) {
+                                        return res.status(500).json({msg: "Error Sending Email.", err: error});
+                                    }
+                                    else{
+                                        console.log('Message %s sent: %s', info.messageId, info.response);
+                                        return res.json({msg: 'Account Created Successfully.'});
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else{
+                        return res.status(500).json({result: 'Error Creating Account'});
+                    }
+                });
             }
         });
     }
