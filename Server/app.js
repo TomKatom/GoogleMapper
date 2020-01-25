@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
+var nodeMailer = require('nodemailer');
 
 
 conn = mysql.createConnection({
@@ -18,7 +19,16 @@ conn.connect((err) => {
         return;
     }
 });
-
+transporter = nodeMailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        // should be replaced with real sender's account
+        user: 'mappermailer@gmail.com',
+        pass: 'Mapper12345'
+    }
+});
 var indexRouter = require('./routes/index');
 var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
