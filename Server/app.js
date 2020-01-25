@@ -9,28 +9,15 @@ const config = require('config');
 
 
 
-conn = mysql.createConnection({
-    host: 'localhost',
-    user: 'mapperAcc',
-    password: config.get('db'),
-    database: 'googlemapperdb'
-});
+conn = mysql.createConnection(config.get('mysql'));
 conn.connect((err) => {
     if(err) {
         console.log('Error connecting.')
         return;
     }
 });
-transporter = nodeMailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-        // should be replaced with real sender's account
-        user: 'mappermailer@gmail.com',
-        pass: config.get('email')
-    }
-});
+transporter = nodeMailer.createTransport(config.get('email'));
+
 var indexRouter = require('./routes/index');
 var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');

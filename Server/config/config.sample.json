@@ -1,4 +1,17 @@
 {
-	"email": "EmailPassword123",
-	"db": "DatabasePassword123"
+ "email": {
+     "host": "smtp.gmail.com",
+     "port": 465,
+     "secure": true,
+     "auth": {
+		"user": "mappermailer@gmail.com",
+		"pass": "emailPassowrd"
+     }
+ },
+ "mysql": {
+  "host": "localhost",
+  "user": "mapperAcc",
+  "password": "dbPassword",
+  "database": "googlemapperdb"
+ }
 }
