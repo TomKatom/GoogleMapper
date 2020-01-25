@@ -19,6 +19,7 @@ router.post('/', [
             if(bcrypt.compareSync(req.body.password, rows[0].password)){
                 req.session.loggedIn = true;
                 req.session.phoneNumber = rows[0].phoneNumber;
+                req.session.userId = rows[0].userId;
                 res.json({msg: 'Logged in.'});
             }
             else{
@@ -30,6 +31,7 @@ router.post('/', [
         }
     });
 });
+
 
 
 module.exports = router;
