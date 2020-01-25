@@ -5,12 +5,14 @@ var logger = require('morgan');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var nodeMailer = require('nodemailer');
+const config = require('config');
+
 
 
 conn = mysql.createConnection({
     host: 'localhost',
     user: 'mapperAcc',
-    password: 'mapper12345',
+    password: config.get('db'),
     database: 'googlemapperdb'
 });
 conn.connect((err) => {
@@ -26,7 +28,7 @@ transporter = nodeMailer.createTransport({
     auth: {
         // should be replaced with real sender's account
         user: 'mappermailer@gmail.com',
-        pass: 'Mapper12345'
+        pass: config.get('email')
     }
 });
 var indexRouter = require('./routes/index');
@@ -34,6 +36,7 @@ var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
 var { authRouter } = require('./routes/auth');
 var markersRouter = require('./routes/markers');
+var verifyRouter = require('./routes/verify');
 
 var app = express();
 
@@ -54,4 +57,5 @@ app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/auth', authRouter);
 app.use('/markers', markersRouter);
+app.use('/verify', verifyRouter);
 module.exports = app;
