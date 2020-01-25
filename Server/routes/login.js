@@ -7,7 +7,9 @@ const { check, validationResult, body } = require('express-validator');
 
 router.post('/', [
     check('phoneNumber').notEmpty().withMessage('You need to supply a phone number'),
-    check('password').notEmpty().withMessage('You need to supply a password')
+    check('password').notEmpty().withMessage('You need to supply a password'),
+    body('phoneNumber').trim().escape(),
+    body('password').trim().escape()
 ], (req, res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
