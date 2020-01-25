@@ -21,6 +21,7 @@ conn.connect((err) => {
 
 var indexRouter = require('./routes/index');
 var registerRouter = require('./routes/register');
+var loginRouter = require('./routes/login');
 
 var app = express();
 
@@ -33,7 +34,10 @@ app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
+app.use(require('express-session')({ secret: 'very secret secret', resave: true, saveUninitialized: true }));
+
 
 app.use('/', indexRouter);
 app.use('/register', registerRouter);
+app.use('/login', loginRouter);
 module.exports = app;

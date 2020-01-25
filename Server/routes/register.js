@@ -39,7 +39,9 @@ router.post('/', [
         var sqlQuery = `insert into tblUsers (username, password, phoneNumber, email) values ("${req.body.username}", "${hash}", "${req.body.phoneNumber}", "${req.body.email}")`;
         console.log(sqlQuery);
         conn.query(sqlQuery, (err, rows, fields) => {
-            if(err) console.log('Error inserting new user.');
+            if(err) {
+                res.json({result: 'Error Creating Account'});
+            }
             else{
                 res.json({result: 'Account Created Successfully.'});
             }
