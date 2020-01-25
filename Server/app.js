@@ -22,7 +22,8 @@ conn.connect((err) => {
 var indexRouter = require('./routes/index');
 var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
-var authRouter = require('./routes/auth');
+var { authRouter } = require('./routes/auth');
+var markersRouter = require('./routes/markers');
 
 var app = express();
 
@@ -42,4 +43,5 @@ app.use('/', indexRouter);
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/auth', authRouter);
+app.use('/markers', markersRouter);
 module.exports = app;

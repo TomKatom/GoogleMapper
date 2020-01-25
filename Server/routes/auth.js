@@ -16,7 +16,7 @@ router.post('/',authorized, (req, res) => {
 });
 
 module.exports = {
-    router: router,
+    authRouter: router,
     authorized: authorized
 };
 
