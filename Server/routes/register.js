@@ -40,7 +40,7 @@ router.post('/', [
         console.log(sqlQuery);
         conn.query(sqlQuery, (err, rows, fields) => {
             if(err) {
-                res.json({result: 'Error Creating Account'});
+                res.status(500).json({result: 'Error Creating Account'});
             }
             else{
                 res.json({result: 'Account Created Successfully.'});
