@@ -36,5 +36,17 @@ module.exports = {
                 }
             })
         })
+    },
+    checkExistsMarkerId: (markerId) => {
+        return new Promise((resolve, reject) => {
+           conn.query(`select * from tblMarkers where markerId = ${markerId}`, (err, rows, fields) => {
+               if(rows.length === 1){
+                  resolve(rows[0]);
+               }
+               else{
+                   reject("The specified marker doesn't exist.");
+               }
+           })
+        });
     }
 }
