@@ -11,12 +11,12 @@ var authorized = (req, res, next) => {
     }
 };
 
-router.post('/',authorized, (req, res) => {
+router.post('/', authorized, (req, res) => {
    res.sendStatus(200);
 });
 
 module.exports = {
-    authRouter: router,
-    authorized: authorized
-};
+    authorized: authorized,
+    authRouter: router
+}
 
