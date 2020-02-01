@@ -2,7 +2,8 @@ import React, {Component, useState, useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import 'typeface-roboto'
-import { HeaderBar }  from './HeaderBar'
+import { HeaderBar }  from './components/HeaderBar'
+import {Login} from './components/login'
 import {
     BrowserRouter as Router,
     Switch,
@@ -10,9 +11,19 @@ import {
     Link
 } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import {makeStyles} from "@material-ui/core/styles";
 
+const useStyles = makeStyles(theme => ({
+    root: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%,-50%)'
+    }
+}));
 
 function App() {
+    const classes = useStyles();
     const [authed, setAuth] = useState(false);
     const [isAuthorized, setAuthorized] = useState(false);
     useEffect(() => {
@@ -34,11 +45,13 @@ function App() {
                     <h1> Register </h1>
                 </Route>
                 <Route path="/login">
-                    <h1> Login </h1>
+                    <Login />
                 </Route>
                 <Route path="/">
                         {!authed && (
-                            <CircularProgress />
+                            <div className={classes.root}>
+                                <CircularProgress size='5rem' />
+                            </div>
                         )}
                         {authed && (
                             <React.Fragment>
