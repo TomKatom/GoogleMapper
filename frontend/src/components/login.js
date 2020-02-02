@@ -1,55 +1,128 @@
-import React, {Component} from 'react'
-import TextField from "@material-ui/core/TextField";
-import {makeStyles} from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from "@material-ui/core/IconButton";
-import {Dialpad, Visibility, VisibilityOff} from "@material-ui/icons";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import Icon from "@material-ui/core/Icon";
-import Button from "@material-ui/core/Button";
-
+import React from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import { useState } from 'react';
+import { Redirect } from 'react-router-dom'
+function Copyright() {
+    return (
+        <Typography variant="body2" color="textSecondary" align="center">
+            {'Copyright © '}
+            <Link color="inherit" href="https://github.com/TomKatom/GoogleMapper">
+                Google Mapper
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
+}
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%,-50%)',
+    paper: {
+        marginTop: theme.spacing(8),
         display: 'flex',
-        flexWrap: 'wrap'
+        flexDirection: 'column',
+        alignItems: 'center',
     },
-    textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        width: 200,
-    }
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%',
+        marginTop: theme.spacing(1),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
 }));
 
-
-export function Login()  {
-    const classes = useStyles()
-    const [values, setValues] = React.useState({
-        phoneNumber: '',
-        password: '',
-        showPassword: false,
-    });
-    const handleChange = prop => event => {
-        setValues({ ...values, [prop]: event.target.value });
-    };
-
-    const handleClickShowPassword = () => {
-        setValues({ ...values, showPassword: !values.showPassword });
-    };
-
-    const handleMouseDownPassword = event => {
-        event.preventDefault();
-    };
-    const handleSubmit = event => {
-        let details = {phoneNumber: values.password, password: values.password};
+export function Login() {
+    const classes = useStyles();
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [password, setPassword] = useState("");
+    const [remember, setRemember] = useState(false);
+    return (
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <div className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign in
+                </Typography>
+                <form className={classes.form} noValidate onSubmit={HandleSubmit}>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="phoneNumber"
+                        label="Phone Number"
+                        name="phoneNumber"
+                        autoComplete="phone Number"
+                        autoFocus
+                        onChange={(e) => {setPhoneNumber(e.target.value)}}
+                        value={phoneNumber}
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        onChange={(e) => {setPassword(e.target.value)}}
+                        value={password}
+                    />
+                    <FormControlLabel
+                        control={<Checkbox value="remember" color="primary" onChange={(e) => {setRemember(e.target.checked)}} value={remember} />}
+                        label="Remember me"
+                    />
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                    >
+                        Sign In
+                    </Button>
+                    <Grid container>
+                        <Grid item xs>
+                            <Link href="/forgotpassword" variant="body2">
+                                Forgot password?
+                            </Link>
+                        </Grid>
+                        <Grid item>
+                            <Link href="/register" variant="body2">
+                                {"Don't have an account? Sign Up"}
+                            </Link>
+                        </Grid>
+                    </Grid>
+                </form>
+            </div>
+            <Box mt={8}>
+                <Copyright />
+            </Box>
+        </Container>
+    );
+    function HandleSubmit(e){
+        let details = {phoneNumber: phoneNumber, password: password};
         var formBody = [];
         for (var property in details) {
             var encodedKey = encodeURIComponent(property);
@@ -65,65 +138,15 @@ export function Login()  {
             },
             body: formBody
         }).then((response) => {
-            JSON.parse(response.body).then(data => console.log(data));
-        }).catch((response) => {
-            console.log(response.body);
+            if(!response.ok){
+                console.log(response.json());
+            }
+            else{
+                window.location.href = "http://localhost:3000/";
+            }
+        }).catch((err) => {
+           console.log(err.message());
         });
-        event.preventDefault();
-    };
-       return (
-      <React.Fragment>
-          <Card variant="outlined" className={classes.root}>
-              <CardActions>
-                  <form onSubmit={handleSubmit} noValidate autoComplete="off" >
-                      <FormControl >
-                          <InputLabel id="phoneNumber" >Phone Number</InputLabel>
-                          <OutlinedInput
-                              className={classes.textField}
-                              id="outlined-adornment-text"
-                              onChange={handleChange('phoneNumber')}
-                              value={values.phoneNumber}
-                              fullWidth
-
-                              startAdornment = {
-                                  <InputAdornment position="start">
-                                    <Icon>
-                                        <Dialpad />
-                                    </Icon>
-                              </InputAdornment>
-                              }
-                          />
-                      </FormControl>
-                      <FormControl >
-                          <InputLabel id="password" >Password</InputLabel>
-                          <OutlinedInput
-                              id="outlined-adornment-password"
-                              className={classes.textField}
-                              type={values.showPassword ? 'text' : 'password'}
-                              value={values.password}
-                              onChange={handleChange('password')}
-                              fullWidth
-                              endAdornment={
-                                  <InputAdornment position="start">
-                                      <IconButton
-                                          aria-label="toggle password visibility"
-                                          onClick={handleClickShowPassword}
-                                          onMouseDown={handleMouseDownPassword}
-                                          edge="end"
-                                      >
-                                          {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                                      </IconButton>
-                                  </InputAdornment>
-                              }
-                          />
-                      </FormControl>
-                      <Button variant="contained" type="submit" className={classes.textField}>
-                          Login
-                      </Button>
-                  </form>
-              </CardActions>
-          </Card>
-      </React.Fragment>
-      )
+        e.preventDefault();
+    }
 }
-
