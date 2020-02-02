@@ -23,11 +23,11 @@ router.post('/', [
                 res.json({msg: 'Logged in.'});
             }
             else{
-                res.json({errors: [{msg: 'Phone number or password do not match.'}]})
+                res.status(403).json({errors: [{msg: 'Phone number or password do not match.'}]})
             }
         }
         else{
-            res.json({errors: [{msg: 'Phone number or password do not match.'}]})
+            res.status(403).json({errors: [{msg: 'Phone number or password do not match.'}]})
         }
     });
 });
