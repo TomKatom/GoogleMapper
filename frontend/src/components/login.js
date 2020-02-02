@@ -139,7 +139,9 @@ export function Login() {
             body: formBody
         }).then((response) => {
             if(!response.ok){
-                console.log(response.json());
+                response.json().then((data) => {
+                    console.log(data);
+                });
             }
             else{
                 window.location.href = "http://localhost:3000/";
