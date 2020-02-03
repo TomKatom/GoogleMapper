@@ -12,6 +12,7 @@ import {
 } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {makeStyles} from "@material-ui/core/styles";
+import {Register} from "./components/Register";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -42,10 +43,16 @@ function App() {
         <Router>
             <Switch>
                 <Route path="/register">
-                    <h1> Register </h1>
+                    <React.Fragment>
+                        <HeaderBar auth={false} login={true} />
+                        <Register/>
+                    </React.Fragment>
                 </Route>
                 <Route path="/login">
-                    <Login />
+                    <React.Fragment>
+                        <HeaderBar auth={false} login={true} />
+                        <Login />
+                    </React.Fragment>
                 </Route>
                 <Route path="/">
                         {!authed && (

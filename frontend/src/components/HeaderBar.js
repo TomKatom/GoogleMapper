@@ -188,7 +188,7 @@ export function HeaderBar(props) {
                     </div>
                     </>
                         )}
-                    {!props.auth && (
+                    {!props.auth && !props.login && (
                         <>
                        <Button color="inherit" href="/register">
                             Register
@@ -198,6 +198,11 @@ export function HeaderBar(props) {
                         </Button>
                        </>
                         )}
+                    {props.login && (
+                        <Button color="inherit" href="/">
+                            Home
+                        </Button>
+                    )}
                 </Toolbar>
             </AppBar>
             {renderMobileMenu}
