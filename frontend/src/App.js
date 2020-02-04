@@ -13,6 +13,7 @@ import {
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {makeStyles} from "@material-ui/core/styles";
 import {Register} from "./components/Register";
+import {Container, TextField, Typography, Grid, Link as LinkBTN} from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -20,6 +21,13 @@ const useStyles = makeStyles(theme => ({
         top: '50%',
         left: '50%',
         transform: 'translate(-50%,-50%)'
+    },
+    container: {
+        display: 'grid'
+    },
+    layer: {
+        gridColumn: 1,
+        gridRow: 1
     }
 }));
 
@@ -27,6 +35,7 @@ function App() {
     const classes = useStyles();
     const [authed, setAuth] = useState(false);
     const [isAuthorized, setAuthorized] = useState(false);
+    const [clicked, setClicked] = useState(false);
     useEffect(() => {
         fetch('http://localhost:5000/auth', {
             credentials: "include",
@@ -54,6 +63,22 @@ function App() {
                         <Login />
                     </React.Fragment>
                 </Route>
+                <Route path="/dev">
+                    <React.Fragment>
+                        <Container >
+                            <Grid>
+                                {!clicked && (
+                                    <LinkBTN component="Typography" className={classes.layer} onClick={(e) => {setClicked(!clicked)}}>
+                                        Some Text
+                                    </LinkBTN>
+                                )}
+                                {clicked && (
+                                    <TextField label="Enter Some Text." className={classes.layer} variant="outlined" onChange={HandleEnter} id="Editor"></TextField>
+                                )}
+                            </Grid>
+                        </Container>
+                    </React.Fragment>
+                </Route>
                 <Route path="/">
                         {!authed && (
                             <div className={classes.root}>
@@ -70,6 +95,13 @@ function App() {
             </Switch>
         </Router>
     );
+    var textField = document.getElementById("Editor");
+    function HandleEnter(e){
+        if(e.Key === "Enter"){
+            setClicked(!clicked);
+            console.log("Fsfdsafdsfs");
+        }
+    }
 }
 
 export default App;

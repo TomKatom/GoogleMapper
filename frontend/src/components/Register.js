@@ -80,7 +80,6 @@ export function Register() {
                                 label="Phone Number"
                                 onChange={(e) => {setPhoneNumber(e.target.value)}}
                                 value={phoneNumber}
-                                autoFocus
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -93,7 +92,6 @@ export function Register() {
                                 id="email"
                                 label="Email"
                                 onChange={(e) => {setEmail(e.target.value)}}
-                                autoFocus
                                 value={email}
                             />
                         </Grid>
