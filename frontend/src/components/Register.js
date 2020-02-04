@@ -53,7 +53,7 @@ export function Register() {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form className={classes.form} noValidate onSubmit={HandleSubmit}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} >
                             <TextField
@@ -148,7 +148,8 @@ export function Register() {
         </Container>
     );
     function HandleSubmit(e) {
-        let details = {username: username, email: email, phoneNumber, password: password, rPassword: rPassword};
+        e.preventDefault();
+        let details = {username: username, email: email, phoneNumber: phoneNumber, password: password, rPassword: rPassword};
         var formBody = [];
         for (var property in details) {
             var encodedKey = encodeURIComponent(property);
@@ -157,7 +158,6 @@ export function Register() {
         }
         formBody = formBody.join("&");
         fetch('http://localhost:5000/register', {
-            credentials: 'include',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -170,8 +170,8 @@ export function Register() {
             else{
                 response.json().then((data) => {
                     console.log(data);
-                })
+                });
             }
-        })
+        });
     }
 }

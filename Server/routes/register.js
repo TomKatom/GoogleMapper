@@ -39,11 +39,13 @@ router.post('/', [
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(req.body.password, salt);
         var sqlQuery = `insert into tblUsers (username, password, phoneNumber, email) values ("${req.body.username}", "${hash}", "${req.body.phoneNumber}", "${req.body.email}")`;
+        console.log("got here");
         conn.query(sqlQuery, (err, rows, fields) => {
             if(err) {
                 return res.status(500).json({result: 'Error Creating Account'});
             }
             else{
+                console.log("inserting to db");
                 conn.query(`select * from tblUsers where username = "${req.body.username}"`, (err, rows, fields) => {
                     if (rows.length === 1) {
                         var token = nanoid(48);
